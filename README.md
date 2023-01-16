@@ -5,6 +5,8 @@ This repository contains the solution to 2 fixed assignments for the course and 
 Each problem folder also contains a paper-like report explaining in detail how it was solved.  
 
 ## Style Change Detection
+<img src="https://github.com/DiegoBiagini/StyleDetect-NLP/blob/master/Project/prev.png?raw=true" width="800" height="400" />
+
 This project and paper describes two simple but effective approaches for the three Style Change Detection (SCD) tasks for PAN at CLEF 2022.  
 The first approach we propose is based on fine-tuning the BERT transformer and training different classification heads to solve all three
 tasks in an end-to-end fashion.  
@@ -12,12 +14,16 @@ The second approach is instead based on sentence transformers (i.e. SBERT-based 
 We show how, using both approaches, we are able to achieve adequate results and also outperform existing state-of-the-art methods in a particular task.
 
 ## Part of Speech tagging
+<img src="https://github.com/DiegoBiagini/StyleDetect-NLP/blob/master/Assignment%201/prev.jpg?raw=true" width="500" height="400" />
+
 In this project and paper, a well defined and structured pipeline to asses the Part-Of-Speech (POS) Tagging problem is proposed. 
 After a careful analysis of the given Penn Treebank dataset, a variety of simple but yet powerful RNN-based models, alongside GloVe embeddings, have been used
 to tackle the problem at hand.  
 After having tuned the hyperparameters of the proposed architectures using a grid-search approach, the two best models have been selected and evaluated on the test split of the original dataset, obtaining overall good results despite the simplicity of the architectures at hand.
 
 ## Generative Question Answering
+<img src="https://github.com/DiegoBiagini/StyleDetect-NLP/blob/master/Assignment%202/prev.png?raw=true" width="400" height="300" />
+
 Conversational generative Question Answering (also called Abstractive Question Answering) is a challenging task that requires understanding of conversational history as well as the ability to generate meaningful answers rather than
 extracting text from a given context as is.  
 In this paper and project we tried to implement various types

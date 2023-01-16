@@ -1,0 +1,281 @@
+
+% This must be in the first 5 lines to tell arXiv to use pdfLaTeX, which is strongly recommended.
+\pdfoutput=1
+% In particular, the hyperref package requires pdfLaTeX in order to break URLs across lines.
+
+\documentclass[11pt]{article}
+
+% Remove the "guidelines" option to generate the final version.
+%\usepackage[guidelines]{nlpreport} % show guidelines
+\usepackage[]{nlpreport} % hide guidelines
+
+
+% Standard package includes
+\usepackage{times}
+\usepackage{latexsym}
+
+% For proper rendering and hyphenation of words containing Latin characters (including in bib files)
+\usepackage[T1]{fontenc}
+% For Vietnamese characters
+% \usepackage[T5]{fontenc}
+% See https://www.latex-project.org/help/documentation/encguide.pdf for other character sets
+
+% This assumes your files are encoded as UTF8
+\usepackage[utf8]{inputenc}
+
+% This is not strictly necessary, and may be commented out,
+% but it will improve the layout of the manuscript,
+% and will typically save some space.
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{amsmath}
+\usepackage{mathtools}
+\usepackage{multirow}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage{booktabs} % for tables
+\usepackage{graphicx}
+
+\setlength{\tabcolsep}{2pt}
+
+
+
+
+% THE pdfinfo Title AND Author ARE NOT NECESSARY, THEY ARE METADATA FOR THE FINAL PDF FILE
+\hypersetup{pdfinfo={
+Title={Assignment 2},
+Author={Jane Smith \& John Doe}
+}}
+%\setcounter{secnumdepth}{0}  
+ \begin{document}
+%
+\title{Assignment 2\\
+\explanation{\rm Substitute the $\uparrow$ title $\uparrow$ with your project's title, or with Assignment 1 / 2\\ \smallskip}
+% subtitle:
+\large \explanation{\rm $\downarrow$ Keep only one of the following three  labels  / leave empty for assignments: $\downarrow$\\}
+
+}
+\author{Diego Biagini,
+Ildebrando Simeoni
+\and
+Matteo Donati
+\\
+Master's Degree in Artificial Intelligence, University of Bologna\\
+\{diego.biagini2, ildebrando.simeoni, matteo.donati10\}@studio.unibo.it
+}
+\maketitle
+
+
+\attention{DO NOT MODIFY THIS TEMPLATE - EXCEPT, OF COURSE FOR TITLE, SUBTITLE AND AUTHORS.\\ IN THE FINAL VERSION, IN THE \LaTeX\ SOURCE REMOVE THE \texttt{guidelines} OPTION FROM  \texttt{$\backslash$usepackage[guidelines]\{nlpreport\}}.
+}
+
+\begin{abstract}
+
+%\begin{quote}
+
+\explanation{
+The abstract is very brief summary of your report. Try to keep it no longer than 15-20 lines at most. Write your objective, your approach, and your main observations (what are the findings that make this report worthwhile reading?)}
+
+%\end{quote}
+\end{abstract}
+
+\attention{\textcolor{red}{NOTICE: THIS REPORT'S LENGTH MUST RESPECT THE FOLLOWING PAGE LIMITS: \begin{itemize}
+    \item ASSIGNMENT: \textbf{2 PAGES} 
+    \item NLP PROJECT OR PROJECT WORK: \textbf{8 PAGES}
+    \item COMBINED NLP PROJECT + PW: \textbf{12 PAGES}
+\end{itemize}  PLUS LINKS, REFERENCES AND APPENDICES.\\ 
+THIS MEANS THAT YOU CANNOT FILL ALL SECTIONS TO MAXIMUM LENGTH. IT ALSO MEANS THAT, QUITE POSSIBLY, YOU WILL HAVE TO LEAVE OUT OF THE REPORT PART OF THE WORK YOU HAVE DONE OR OBSERVATIONS YOU HAVE. THIS IS NORMAL: THE REPORT SHOULD EMPHASIZE WHAT IS MOST SIGNIFICANT, NOTEWORTHY, AND REFER TO THE NOTEBOOK FOR ANYTHING ELSE.\\ 
+FOR ANY OTHER ASPECT OF YOUR WORK THAT YOU WOULD LIKE TO EMPHASIZE BUT CANNOT EXPLAIN HERE FOR LACK OF SPACE, FEEL FREE TO ADD COMMENTS IN THE NOTEBOOK.\\ 
+INTERESTING TEXT EXAMPLES THAT EXCEED THE MAXIMUM LENGTH OF THE REPORT CAN BE PLACED IN A DEDICATED APPENDIX AFTER THE REFERENCES.}}
+
+
+\section{Introduction}
+\label{sec:introduction}
+\attention{MAX 1 COLUMN FOR ASSIGNMENT REPORTS / 2 COLUMNS FOR PROJECT OR PW / 3 FOR COMBINED REPORTS.}
+
+\explanation{
+The Introduction is an executive summary, which you can think of as an extended abstract.  Start by writing a brief description of the problem you are tackling and why it is important. (Skip it if this is an assignment report).} 
+
+\explanation{Then give a short overview of known/standard/possible approaches to that problems, if any, and what are their advantages/limitations.} 
+
+\explanation{After that, discuss your approach, and motivate why you follow that approach. If you are drawing inspiration from an existing model, study, paper, textbook example, challenge, \dots, be sure to add all the necessary references~\cite{DBLP:journals/corr/abs-2204-02311,DBLP:conf/acl/LorenzoMN22,DBLP:conf/clef/AnticiBIIGR21,DBLP:conf/ijcai/NakovCHAEBPSM21,DBLP:conf/naacl/RottgerVHP22,DBLP:journals/toit/LippiT16}.\footnote{\href{https://en.wikipedia.org/wiki/The_Muppet_Show}{Add only what is relevant.}}}
+
+\explanation{Next, give a brief summary of your experimental setup: how many experiments did you run on which dataset. Last, make a list of the main results or take-home lessons from your work.}
+
+\attention{HERE AND EVERYWHERE ELSE: ALWAYS KEEP IN MIND THAT, CRUCIALLY, WHATEVER TEXT/CODE/FIGURES/IDEAS/... YOU TAKE FROM ELSEWHERE MUST BE CLEARLY IDENTIFIED AND PROPERLY REFERENCED IN THE REPORT.}
+
+
+\section{System description}
+\label{sec:system}
+\attention{MAX 1 COLUMN FOR ASSIGNMENT REPORTS / 4 COLUMNS FOR PROJECT OR PW / 6 FOR COMBINED REPORTS.}
+Compared to method 1, where a plain transformer with standard classification loss functions are used, method 2 focuses on a metric learning approach.
+To detect whether two passages $x_1,x_2$ were written by the same author with an encoder model $M$ we can proceed as follows:
+\begin{itemize}
+    \item Obtain an embedding for the two input passages, $e_1=M(x_1), e_2=M(x_2)$
+    \item Compute the cosine similarity between the two, $sim = cosine\_sim(e_1,e_2)$
+    \item Apply a threshold $\tau$ on $sim$, below which we say that the two documents are written by different authors
+\end{itemize}
+The paradigm of metric learning ensures that embeddings of texts from different authors have low similarity, while embeddings from the same author should cluster together.
+
+As for the loss which should be used, our dataset allows for both a contrastive and triplet approach.
+
+To train our model under contrastive loss a training set of contrastive pairs and their similarity (1 if they are from the same author, 0 otherwise) 
+has to be created, here we have to be careful in building a balanced dataset such that we have enough of both same-author/different-author pairs.
+
+As for triplet loss, we built a dataset of triplets where the anchor is a passage from an author $A_1$, the positive is a different passage in the same conversation 
+by the same author $A_1$ and the negative is a passage from a different author $A_2$.
+In building such a triplet dataset we can also consider the difficulty of samples, thus we evaluated our models building both general triplet datasets, 
+where no filtering of examples is performed, as well as hard/semi-hard datasets, where only hard and semi hard examples are put into the training set.
+
+This general metric training strategy was applied to all the three tasks, however when we actually want to solve them we can exploit some of the properties of the current task to define more effectively how to perform inference to detect where we have a style change.\\
+
+For \textbf{task 1} we know that we only have two authors and the change between them happens only once. Thus we can solve our problem of finding the change point
+by just finding the consecutive pairs of passages which differ the most.
+
+For tasks 2 and 3 we don't have this extremely useful bias, we actually have to take the similarity between two passages/phrases and decide on a threshold below which we say they differ. 
+
+For \textbf{task 2} we not only have to detect the style change points, but also assign each passage to an author, something akin to a clustering problem.
+For this reason two methods were devised: a threshold based one and an unspervised clustering based one.
+
+The threshold based one works as follows:
+\begin{itemize}
+    \item start from the first passage, for each of them compare its similarity with all the previous texts.
+    \item apply the threshold to all of them to detect pairwise changes, if we notice that we detect a style change for all of them this means that we have a new cluster. In case we already have 5 clusters (the maximum 
+number of different authors in a conversation) even if we detect a change assign it to the cluster of the most similar other passage
+\item If after thresholding we detect that there is no style change between said passage and any one of them, assign this passage to the same cluster as the one from 
+which the most similar passage came from
+\end{itemize}
+
+A succinct algorithm for this operation can be found in image.
+%TODO:
+
+As for the method based on unsupervised clustering, once we have the pairwise cosine distances (which is just $1-cosine(e_1,e_2)$) between all passages we have a distance 
+matrix. This can be used as a precomputed metric to run standard clustering algorithms on top of it, like DBSCAN.
+
+\textbf{Task 3} is similar to task 2 in the sense that we can't really work on only similarities and we need a threshold to decide when to say that between two consecutive
+documents there's a style change. \\
+
+As we have seen task 2 (when not using unsupervised clustering) and 3 require the definition of a \textbf{threshold} under which two passages are said to be from different authors.
+Two methods of threshold selection in the contrastive case were implemented:
+\begin{itemize}
+    \item The margin $\alpha$ is the threshold, this makes sense since the contrastive loss aims to separate documents from different authors such that:
+    
+    \begin{cases}
+      dist(e_1,e_2)\simeq 0 &  \text{if } Auth(x_1)=Auth(x_2) \\
+      dist(e_1,e_2) > \alpha & $\text{if } Auth(x_1)\neq Auth(x_2)$
+    \end{cases}
+    \item The threshold is inferred from the training set, after training we can apply our model to the contrastive pairs and measure the average similarity for 
+    same-author samples and different-author samples, the threshold should lie between these two averages. In pratice it was found to be advantegeous to consider
+    the standard deviation of these two groups of similarities as well, in this way if for example the range of similarities for the same-author group is low, the threshold should be put closer to its mean than the mean of the 
+different-authors group.
+\end{itemize}
+
+A similar approach can be used to get the similarity for the triplet examples, by splitting each triplet example in two contrastive ones, thus computing the average
+of same-author similarities between anchors and positives and the average of different-author similarities between anchors and negatives.\\
+
+As for the implementation and training of these metric models we used the \textit{sentence-transformers} library. 
+
+\explanation{
+Describe the system or systems you have implemented (architectures, pipelines, etc), and used to run your experiments. If you reuse parts of code written by others, be sure to make very clear your original contribution in terms of
+\begin{itemize}
+    \item architecture: is the architecture your design or did you take it from somewhere else
+    \item coding: which parts of code are original or heavily adapted? adapted from existing sources? taken from external sources with minimal adaptations?
+\end{itemize}
+It is a good idea to add figures to illustrate your pipeline and/or architecture(s)
+(see Figure~\ref{fig:architecture})
+
+}
+
+\section{Experimental setup and results}
+\label{sec:results}
+\attention{MAX 1 COLUMN FOR ASSIGNMENT REPORTS / 3 COLUMNS FOR PROJECT OR PW / 5 FOR COMBINED REPORTS.}
+
+\explanation{
+Describe how you set up your experiments: which architectures/configurations you used, which hyper-parameters and what methods used to set them, which optimizers, metrics, etc.
+\\
+Then, \textbf{use tables} to summarize your your findings (numerical results) in validation and test. If you don't have experience with tables in \LaTeX, you might want to use \href{https://www.tablesgenerator.com/}{\LaTeX table generator} to quickly create a table template.
+}
+The metric learning approach was tested along different dimensions, from the model choice to the training regime to the dataset creation.
+
+For each task we trained the models only using data which was provided exclusively for that task, this was needed especially in task 3, where the passages that we have to analyze are phrases and differ considerably from the samples we have for task 1 and 2.\\
+
+One of the first choices we had to make was which pretrained \textit{sentence\_transformers} model to finetune, we thus decided to use two base models, a general purpose one, \textit{all-mpnet-base-v2} based on the MPNet architecture by Microsoft, and a model which was already trained to discern writing style in text, \textit{Style-Embedding} based on RoBERTa.
+
+For each task and base model we decided to test the performance of four different ways of training them:
+\begin{enumerate}
+    \item No training (baseline)
+    \item Training under contrastive loss
+    \item Training under triplet loss without filtering training triplets
+    \item Training under triplet loss using only hard and semi-hard triplets
+\end{enumerate}
+
+For all of the tasks we used the AdamW optimizer with a weight decay of 0.01, a learning rate of $2\cdot 10^{-5}$, with a linear warmup schedule that peaks at 10\% of the training steps and a batch size of 8; the margin for the contrastive/triplet loss has always been set to 0.6.
+For modality 2 and 3 we trained for 2 epochs, while for modality 4 we trained for 3, since less examples are available.
+For task 1 and 2 we set the maximum length of a passage to be 128 tokens, while for task 3 we set this value to 32 tokens.
+To avoid training for too long we set the following maximum values for the number of samples in the training set (be them contrastive or triplet) according to the task: 20000 for task 1, 50000 for task 2, 100000 for task 3.
+
+For tasks 2 and 3 we tested the result of using both the margin as threshold and a different threshold computed on the training set.
+
+For task 2 we tested using both the threshold based methods and the unsupervised clustering based one, in the latter case we used the sklearn implementation of the DBSCAN clustering algorithm to which we provided the precomputed distance matrix and the following hyperparameters: min\_samples =1 and eps=0.5.
+
+The results of all these tests on the validation set are reported in table , with every run being set to be reproducible by fixing a seed.
+\begin{table*}
+\setlength{\tabcolsep}{0.7em} % for the horizontal padding
+\def\arraystretch{1.25}%  1 is the default, change whatever you need
+ \begin{tabular}{c c|c|c|c|c|c|c|}
+            \cline{3-8}
+             &  & Task 1 &  \multicolumn{3}{|c|}{Task 2} &  \multicolumn{2}{|c|}{Task 3}\\
+            \cline{3-8}
+             &  & - & Margin & Mean & DBSCAN & Margin & Mean\\
+             \hline
+           \multirow{4}{*}{MPNET} & Untrained & 0.59 & - & 0.24 & 0.26 & - & 0.54\\
+            & Contrastive & 0.79 & 0.38 & 0.44 & 0.21 & 0.67 & 0.69 \\
+             & Triplet & 0.79 & 0.42 & 0.37 & 0.38 & 0.60 & 0.65 \\
+             & Triplet (Hard/Semihard) & 0.78 & 0.41 & 0.36 & 0.39 & 0.61 & 0.65\\
+             \hline
+            \multirow{4}{*}{StyleEmbedding} & Untrained & 0.7 & - & 0.33 & 0.31 & - & 0.58\\
+            & Contrastive & 0.78 & 0.32 & 0.44 & 0.17 & 0.64 & 0.67 \\
+             & Triplet & 0.78 & 0.42 & 0.39 & 0.38 & 0.61 & 0.66 \\
+             & Triplet (Hard/Semihard) & 0.8 & 0.41 & 0.36 & 0.38 & 0.59 & 0.64\\
+             \hline
+        \end{tabular}
+\end{table*}
+\section{Discussion}
+\label{sec:discussion}
+\attention{MAX 1.5 COLUMNS FOR ASSIGNMENT REPORTS / 3 COLUMNS FOR PROJECT / 4 FOR COMBINED REPORTS. ADDITIONAL EXAMPLES COULD BE PLACED IN AN APPENDIX AFTER THE REFERENCES IF THEY DO NOT FIT HERE.}
+
+\explanation{
+Here you should make your analysis of the results you obtained in your experiments. Your discussion should be structured in two parts: 
+\begin{itemize}
+    \item discussion of quantitative results (based on the metrics you have identified earlier; compare with baselines);
+    \item error analysis: show some examples of odd/wrong/unwanted  outputs; reason about why you are getting those results, elaborate on what could/should be changed in future developments of this work.
+\end{itemize}
+}
+
+If we consider the untrained models as baseline we can notice that they reach a not insignificant level of accuracy, in particular the \textit{Style-Embedding} one, which outperforms the \textit{all-mpnet} model on all tasks and with all inference methods.
+
+This gap between the two types of models is not present when they are finetuned, with both of them reaching similar performance on all tasks under all inference methods.
+In particular the overall best result on task 1 is obtained with \textit{Style-Embedding}, while for task 3 the winner is \textit{all-mpnet} and on task 2 they are pretty much the same.\\
+
+When talking about the ways to solve tasks 2 and 3, it seems like using a learned threshold is usually better than fixing it to the margin. Surprisingly enough this does not hold for task 2 when using triplet loss.
+As for the unsupervised approach in task 2, it seems to almost always be inferior to the threshold one, with some of the times being just a little worse and others failing hard. This is likely due to the decision of not tuning the hyperparameters of DBSCAN.\\
+
+With regards to the choice of which triplets to choose when using triplet loss, it seems like using only hard and semi-hard examples has overall a very slight negative impact on the results; however this could be due to the lower number of samples obtained and consequently the lower number of examples seen by the model.\\
+
+When looking at how the model behaves in tasks 2 and 3 as the number of author changes, we can notice that the model has the biggest problems when the conversation is written by a single author. Furthermore it seems like in task 2 as the number of author increases so does the f1-score, meanwhile for task 3 the model gets the best results on conversations with 2 authors and then gently declines.
+\section{Conclusion}
+\label{sec:conclusion}
+\attention{MAX 1 COLUMN.}
+
+\explanation{
+In one or two paragraphs, recap your work and main results.
+What did you observe? 
+Did all go according to expectations? 
+Was there anything surprising or worthwhile mentioning?
+After that, discuss the main limitations of the solution you have implemented, and indicate promising directions for future improvement.
+}
+
+
+\bibliography{nlpreport.bib}
+\end{document}
